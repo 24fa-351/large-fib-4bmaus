@@ -1,67 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-unsigned long long fibonacci_iterative(int position) {
-    if (position == 1) {
-        return 0;
-    } else if (position == 2) {
-        return 1;
-    }
-    
-    unsigned long long first = 0;
-    unsigned long long second = 1;
-    unsigned long long next;
-    for (int current_position = 3; current_position <= position; current_position++) {
-        next = first + second;
-        first = second;
-        second = next;
-    }
-    return second;
+unsigned long long recursive_fib(int position) {
+    if (position == 0) return 0;
+    if (position == 1 || position == 2) return 1;
+    return recursive_fib(position - 1) + recursive_fib(position - 2);
 }
 
-unsigned long long fibonacci_recursive(int position) {
-    if (position == 1) {
-        return 0;
-    } else if (position == 2) {
-        return 1;
+unsigned long long iterative_fib(int position) {
+    if (position == 0) return 0;
+    if (position == 1 || position == 2) return 1;
+    unsigned long long previous = 1;
+    unsigned long long current = 1;
+    unsigned long long next_fib;
+    for (int index = 3; index <= position; index++) {
+        next_fib = previous + current;
+        previous = current;
+        current = next_fib;
     }
-    return fibonacci_recursive(position - 1) + fibonacci_recursive(position - 2);
+    return current;
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 4) {
-        printf("Usage: %s <integer> <method (r/i)> <filename>\n", argv[0]);
+    if (argc != 3) {
+        printf("Usage: %s <integer> <r|i>\n", argv[0]);
         return 1;
     }
 
-    int command_line_input = atoi(argv[1]);
+    int position = atoi(argv[1]);
+    unsigned long long result;
 
-    char calculation_method = argv[2][0];
-
-    FILE *input_file = fopen(argv[3], "r");
-    if (!input_file) {
-        printf("Error: could not open file %s\n", argv[3]);
-        return 1;
-    }
-
-    int file_input;
-    fscanf(input_file, "%d", &file_input);
-    fclose(input_file);
-
-    int target_position = command_line_input + file_input;
-
-    unsigned long long fibonacci_result;
-    if (calculation_method == 'i') {
-        fibonacci_result = fibonacci_iterative(target_position);
-    } else if (calculation_method == 'r') {
-        fibonacci_result = fibonacci_recursive(target_position);
+    if (argv[2][0] == 'r') {
+        result = recursive_fib(position - 1);
+    } else if (argv[2][0] == 'i') {
+        result = iterative_fib(position - 1);
     } else {
-        printf("Invalid method specified. Use 'i' for iterative or 'r' for recursive.\n");
+        printf("Invalid method. Use 'r' for recursive or 'i' for iterative.\n");
         return 1;
     }
 
-
-    printf("%llu\n", fibonacci_result);
+    printf("%llu\n", result);
 
     return 0;
 }
