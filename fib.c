@@ -11,7 +11,7 @@ unsigned long long fibonacci_iterative(int position) {
     unsigned long long first = 0;
     unsigned long long second = 1;
     unsigned long long next;
-    for (int current = 3; current <= position; current++) {
+    for (int current_position = 3; current_position <= position; current_position++) {
         next = first + second;
         first = second;
         second = next;
@@ -19,7 +19,7 @@ unsigned long long fibonacci_iterative(int position) {
     return second;
 }
 
-unsigned long long int fibonacci_recursive(int position) {
+unsigned long long fibonacci_recursive(int position) {
     if (position == 1) {
         return 0;
     } else if (position == 2) {
@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
     }
 
     int command_line_input = atoi(argv[1]);
+
     char calculation_method = argv[2][0];
 
     FILE *input_file = fopen(argv[3], "r");
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
 
     int target_position = command_line_input + file_input;
 
-    unsigned long long int fibonacci_result;
+    unsigned long long fibonacci_result;
     if (calculation_method == 'i') {
         fibonacci_result = fibonacci_iterative(target_position);
     } else if (calculation_method == 'r') {
@@ -58,6 +59,7 @@ int main(int argc, char *argv[]) {
         printf("Invalid method specified. Use 'i' for iterative or 'r' for recursive.\n");
         return 1;
     }
+
 
     printf("%llu\n", fibonacci_result);
 
